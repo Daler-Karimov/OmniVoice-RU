@@ -416,9 +416,18 @@ with gr.Blocks(title="OmniVoice WebUI") as demo:
             )
 
 if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser(description="OmniVoice WebUI")
+    parser.add_argument("--share", action="store_true", default=True, help="Создавать публичную ссылку Gradio")
+    parser.add_argument("--no-share", action="store_false", dest="share", help="Отключить публичную ссылку Gradio")
+    parser.add_argument("--ip", default="0.0.0.0", help="IP адрес сервера (по умолчанию 0.0.0.0)")
+    parser.add_argument("--port", type=int, default=7860, help="Порт сервера (по умолчанию 7860)")
+    args, _ = parser.parse_known_args()
+
     demo.queue().launch(
-        server_name="127.0.0.1",
-        server_port=7860,
+        server_name=args.ip,
+        server_port=args.port,
+        share=args.share,
         inbrowser=True,
         theme=theme,
     )

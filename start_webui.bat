@@ -29,7 +29,7 @@ echo.
 echo Starting OmniVoice Web UI on http://127.0.0.1:7860 ...
 echo Models available: PyTorch FP16, GGUF BF16, GGUF Q8_0, GGUF Q4_K_M
 
-python webui.py
+python webui.py --share %*
 
 if errorlevel 1 (
     echo.
