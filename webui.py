@@ -422,12 +422,16 @@ with gr.Blocks(title="OmniVoice WebUI") as demo:
 def find_free_port(preferred_port: int = 7860, max_attempts: int = 50) -> int:
     import socket
     for p in range(preferred_port, preferred_port + max_attempts):
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        busy = False
+        for host in ("127.0.0.1", "0.0.0.0"):
             try:
-                s.bind(("0.0.0.0", p))
-                return p
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    s.bind((host, p))
             except OSError:
-                continue
+                busy = True
+                break
+        if not busy:
+            return p
     return preferred_port
 
 
