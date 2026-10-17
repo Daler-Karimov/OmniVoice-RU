@@ -1,0 +1,51 @@
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Models & Weights (large binary files >100MB)
+models/
+*.gguf
+*.safetensors
+*.bin
+*.pt
+*.pth
+
+# Audio files & outputs
+*.wav
+*.mp3
+*.flac
+*.ogg
+outputs/
+
+# Python cache & build
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+*.egg
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+/.cache*
+/.tmp/
+
+# C++ build artifacts
+omnivoice_cpp/build/
+omnivoice_cpp/build*
+*.obj
+*.exe
+*.dll
+*.lib
+*.pdb
+*.exp
+
+# System & IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.claude/
