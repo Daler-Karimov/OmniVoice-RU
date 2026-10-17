@@ -50,7 +50,11 @@ MODEL_VARIANTS = {
     },
 }
 
-DEFAULT_MODEL = "GGUF Q8_0 (Рекомендуемый, ~620 МБ, высокая скорость)"
+DEFAULT_MODEL = (
+    "GGUF Q8_0 (Рекомендуемый, ~620 МБ, высокая скорость)"
+    if CPP_EXE.exists()
+    else "PyTorch FP16 (Оригинал k2-fsa/OmniVoice, ~3.03 ГБ)"
+)
 
 # Lazy loaded PyTorch model
 _pytorch_model = None

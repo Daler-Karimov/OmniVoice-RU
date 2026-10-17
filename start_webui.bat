@@ -20,15 +20,15 @@ if not exist "%~dp0venv\Scripts\python.exe" (
     "%~dp0venv\Scripts\pip.exe" install torch==2.8.0+cu128 torchaudio==2.8.0+cu128 --extra-index-url https://download.pytorch.org/whl/cu128
     echo [INFO] Installing OmniVoice dependencies...
     "%~dp0venv\Scripts\pip.exe" install -e .
+    "%~dp0venv\Scripts\pip.exe" install cmake ninja
 )
 
-if not exist "%~dp0omnivoice_cpp\build\omnivoice-tts.exe" (
-    if exist "%~dp0omnivoice_cpp\build_win.bat" (
-        echo.
-        echo [INFO] GGUF engine omnivoice-tts.exe not found. Attempting to build with CUDA...
-        call "%~dp0omnivoice_cpp\build_win.bat"
-    )
-)
+if exist "%~dp0omnivoice_cpp\build\omnivoice-tts.exe" goto :engine_ready
+if not exist "%~dp0omnivoice_cpp\build_win.bat" goto :engine_ready
+echo.
+echo [INFO] GGUF engine omnivoice-tts.exe not found. Building...
+call "%~dp0omnivoice_cpp\build_win.bat"
+:engine_ready
 
 echo Activating virtual environment...
 call "%~dp0venv\Scripts\activate.bat"

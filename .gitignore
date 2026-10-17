@@ -35,7 +35,6 @@ build/
 
 # C++ build artifacts
 omnivoice_cpp/build/
-omnivoice_cpp/build*
 *.obj
 *.exe
 *.dll
