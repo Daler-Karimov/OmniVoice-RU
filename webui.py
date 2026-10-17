@@ -187,7 +187,11 @@ def generate_speech(
                 return None, f"Файлы модели {model_path.name} не найдены и не удалось их скачать: {e}"
 
         if not CPP_EXE.exists():
-            return None, f"Исполняемый файл {CPP_EXE} не найден."
+            return None, (
+                f"Исполняемый файл {CPP_EXE.name} не найден.\n"
+                "Для использования GGUF моделей скомпилируйте C++ движок (запустите omnivoice_cpp\\build_win.bat)\n"
+                "или переключитесь в выпадающем списке модели на 'PyTorch FP16'."
+            )
 
         out_wav = Path(tempfile.gettempdir()) / f"omnivoice_{int(time.time()*1000)}.wav"
 
@@ -415,6 +419,18 @@ with gr.Blocks(title="OmniVoice WebUI") as demo:
                 outputs=[vc_audio, vc_status],
             )
 
+def find_free_port(preferred_port: int = 7860, max_attempts: int = 50) -> int:
+    import socket
+    for p in range(preferred_port, preferred_port + max_attempts):
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            try:
+                s.bind(("0.0.0.0", p))
+                return p
+            except OSError:
+                continue
+    return preferred_port
+
+
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description="OmniVoice WebUI")
@@ -424,9 +440,13 @@ if __name__ == "__main__":
     parser.add_argument("--port", type=int, default=7860, help="Порт сервера (по умолчанию 7860)")
     args, _ = parser.parse_known_args()
 
+    port = find_free_port(preferred_port=args.port)
+    if port != args.port:
+        print(f"[INFO] Порт {args.port} уже занят. Автоматически выбран свободный порт {port}.")
+
     demo.queue().launch(
         server_name=args.ip,
-        server_port=args.port,
+        server_port=port,
         share=args.share,
         inbrowser=True,
         theme=theme,

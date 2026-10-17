@@ -22,6 +22,14 @@ if not exist "%~dp0venv\Scripts\python.exe" (
     "%~dp0venv\Scripts\pip.exe" install -e .
 )
 
+if not exist "%~dp0omnivoice_cpp\build\omnivoice-tts.exe" (
+    if exist "%~dp0omnivoice_cpp\build_win.bat" (
+        echo.
+        echo [INFO] GGUF engine omnivoice-tts.exe not found. Attempting to build with CUDA...
+        call "%~dp0omnivoice_cpp\build_win.bat"
+    )
+)
+
 echo Activating virtual environment...
 call "%~dp0venv\Scripts\activate.bat"
 
